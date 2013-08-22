@@ -90,13 +90,13 @@ E-mail: conis.yi@gmail.com
 }
 
 //主键：{{name}}
-+(NSString*) {{uniqueField.propertyName}}{
++(NSString*) Field{{uniqueField.propertyName}}{
   return @"{{uniqueField.name}}";
 }
 
 {{#fields}}
 //字段名：{{name}}
-+(NSString*) {{propertyName}}{
++(NSString*) Field{{propertyName}}{
   return @"{{name}}";
 }
 {{/fields}}
