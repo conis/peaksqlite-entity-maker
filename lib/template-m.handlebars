@@ -1,0 +1,73 @@
+/*
+{{className}}.m
+{{tableName}}的实体类，基于peaksqlite-entity-maker生成。所生成的代码仅适用于PeakSqlite项目
+更多敬请访问：https://github.com/conis/peaksqlite-entity-maker
+PeakSqlite项目：https://github.com/conis/PeakSqlite
+
+=======================作者信息====================
+作者：Conis
+GitHub: https://github.com/conis
+博客：http://iove.net/
+E-mail: conis.yi@gmail.com
+*/
+
+#import "{{className}}.h"
+
+@implementation {{className}}
+
+//初始化
+-(id) initWithFMDB:(FMDatabase *)database{
+  self = [super initWithFMDB:database];
+  if(self){
+    //给表名赋值
+    self.tableName = @"{{tableName}}";
+    //字段列表
+    self.fields = @[@"{{uniqueField.name}}", {{#fields}}{{#if @index}}, {{/if}}@"{{name}}"{{/fields}}];
+    {{#fields}}{{#if unique}}self.primaryField = @"{{name}}";{{/if}}{{/fields}}
+    self.primaryField = @"{{uniqueField.name}}";
+    [self setDefault];
+  }
+  return self;
+}
+
+//设置默认数据
+-(void) setDefault{
+  //清除数据
+  self.{{uniqueField.propertyName}} = NSNotFound;
+  self.todo = nil;
+  self.timestamp = nil;
+}
+
+//获取所有字段存到数据库的值
+-(NSArray *) parameters{
+  return @[
+    {{#fields}}{{#if @index}},
+    {{/if}}{{parameter}}{{/fields}}
+  ];
+}
+
+//插入数据
+-(int)insert{
+  NSString *sql = @"INSERT INTO {{tableName}}(%@) VALUES (%@)";
+  NSString *insertFields = @"{{#fields}}{{#if @index}},{{/if}}{{name}}{{/fields}}";
+  NSString *insertValues = @"{{#fields}}{{#if @index}},{{/if}}?{{/fields}}";
+
+  //没有指定主键
+  if(self.{{uniqueField.propertyName}} != NSNotFound){
+    insertFields = [insertFields stringByAppendingString: @", {{uniqueField.name}}"];
+    insertValues = [insertValues stringByAppendingString: @", ?"];
+  }
+  sql = [NSString stringWithFormat: sql, insertFields, insertValues];
+  return [self insertWithSql:sql parameters: [self parameters]];
+}
+
+//更新数据
+-(BOOL)update{
+  NSString *sql = @"UPDATE todolist SET todo = ?, timestamp = ?, done = ? WHERE id = ?";
+  [self.database open];
+  BOOL result = [self.database executeUpdate:sql withArgumentsInArray: [self parameters]];
+  [self.database close];
+  return result;
+}
+
+@end
