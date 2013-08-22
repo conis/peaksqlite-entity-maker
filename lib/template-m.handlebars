@@ -34,8 +34,8 @@ E-mail: conis.yi@gmail.com
 -(void) setDefault{
   //清除数据
   self.{{uniqueField.propertyName}} = NSNotFound;
-  self.todo = nil;
-  self.timestamp = nil;
+  {{#fields}}self.{{propertyName}} = {{defaultValue}};
+  {{/fields}}
 }
 
 //获取所有字段存到数据库的值
