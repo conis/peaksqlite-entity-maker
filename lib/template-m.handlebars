@@ -63,11 +63,41 @@ E-mail: conis.yi@gmail.com
 
 //更新数据
 -(BOOL)update{
-  NSString *sql = @"UPDATE todolist SET todo = ?, timestamp = ?, done = ? WHERE id = ?";
+  NSString *sql = @"UPDATE todolist SET {{#fields}}{{#if @index}},{{/if}}{{name}} = ?{{/fields}} WHERE {{uniqueField.name}} = ?";
   [self.database open];
   BOOL result = [self.database executeUpdate:sql withArgumentsInArray: [self parameters]];
   [self.database close];
   return result;
 }
 
+//转换字典到当前实例
+-(void)parseFromDictionary: (NSDictionary *) data{
+  self.data = data;
+  self.{{uniqueField.propertyName}} = [[data objectForKey:@"{{uniqueField.name}}"] intValue];
+  {{#fields}}
+  self.{{propertyName}} = {{parse}};{{/fields}}
+}
+
+//==================获取字段名及表名==================
+//获取所有的字段名称
++(NSArray *) fields{
+  return  @[@"{{uniqueField.name}}", {{#fields}}{{#if @index}}, {{/if}}@"{{name}}"{{/fields}}];
+}
+
+//获取表名
++(NSString*)tableName{
+  return @"{{tableName}}";
+}
+
+//主键：{{name}}
++(NSString*) {{uniqueField.propertyName}}{
+  return @"{{uniqueField.name}}";
+}
+
+{{#fields}}
+//字段名：{{name}}
++(NSString*) {{propertyName}}{
+  return @"{{name}}";
+}
+{{/fields}}
 @end
