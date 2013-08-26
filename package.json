@@ -1,7 +1,7 @@
 {
 	"name": "peaksqlite-entity-maker",
 	"description": "用于PeakSqlite项目的实体生成器",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"author": {
 		"name": "Conis",
 		"url": "http://iove.net/"
@@ -23,10 +23,14 @@
 	"main": "./lib",
 	"dependencies": {
 		"strformat": "*",
-		"sql-analyzer":"*",
+		"sql-analyzer": "git://github.com/conis/sql-analyzer#master",
 		"underscore":"",
 		"underscore.string": "",
-		"handlebars": ""
+		"handlebars": "",
+		"commander": "*"
+	},
+	"bin": {
+		"peaksqlite": "./lib/maker.js"
 	},
 	"devDependencies": {
 		"mocha" : "*",
