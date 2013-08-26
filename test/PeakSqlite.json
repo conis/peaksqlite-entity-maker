@@ -1,9 +1,6 @@
 {
-  "sqlist":[
-    "CREATE TABLE if not exists todolist(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, timestamp FLOAT, done boolean DEFAULT false, todo TEXT, category_id INTEGER)",
-	  "CREATE TABLE if not exists category(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, name TEXT, timestamp FLOAT)"
-  ],
-  "saveToFolder": "./entity",
+	"sqlite": "test.sqlite",
+  "saveToFolder": "./",
   "options": {
   	"classFormatter": "{0}Model",
     "mapping":{
