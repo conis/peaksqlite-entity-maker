@@ -13,18 +13,48 @@ Blog: [http://iove.net](http://iove.net)
 E-mail: [conis.yi@gmail.com](conis.yi@gmail.com)
 
 #Usage
+`npm install peaksqlite-entity-maker`，建议使用全局方式进行安装，`npm install -g peaksqlite-entity-maker`
+
+##通过命令行调用方式
+此方式也是最常用的调用方式，如下：
+1. 创建一个配置文件`PeakSqlite.json`，格式请参照`test/PeakSqlite.json`。
+2. 打开终端，运行`peaksqlite <path>`，如果不指定path，将会到当前目前查找`PeakSqlite.json`的配置文件。
+
+##直接的调用方式
+````js
+  var maker = require('peaksqlite-entity-maker');
+  //通过sql的方式调用
+  maker.makeWithSql(sql, saveTo, options);
+  //通过sqlite调用
+  maker.makeWithSqlite(sqlite, saveTo, options, callback);
+  //通过配置文件调用
+  maker.makeForConfig(cfgFile, callback);
+````
+
+##PeakSqlite配置指南
+`sqlite`: 可以直接给定一个sqlite文件的路径，如果`sqlite`为字符类型，则直接读取sqlite数据库；如果`sqlite`为数组，则应该是sql语句列表。
+`saveToFolder`: 生成的实体要保存的目录
+
+#options
+配置文件中的`options`与`makeWithSql`、`makeWithSqlite`、`makeForConfig`中的`options`是一样的。
+'classFormatter': 类的格式化方式，默认为"{0}Entity"，即生成表名+Entity的方式，如TodolistEntity。
+`allowUnderscore`：是否允许下划线，默认为`false`，会将字段和表名中的下划线转换为大小写的方式，如todo_level转换为todoLevel。
+`mapping`：重新定义映射，主要是针对数据库中的数据类型与实际类型不一致的情况，目前重点是针对日期类型。
+    "mapping":{
+      //表名
+      "todolist": {
+        //字段名重新对应数据类型为日期类型
+        "timestamp": "date"
+      },
+      "category": {
+        "timestamp": "date"
+      }
+    }
+##其它
 
 自用模块，使用说明欠奉，可参考测试用例中的代码，请参考示例代码，欢迎完善。
 对建表的Sql语句会有较高的要求，没有加入容错设计。
-日期类型需要注意，因为FMDB无法处理日期格式的数据类型，我一般的做法是准备两套sql代码，建表时日期类型的字段为float或者double类型，用于生成代码的字段类型为date类型。
-例如：
-建表的时候使用：`CREATE TABLE if not exists todolist(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, timestamp FLOAT, done boolean DEFAULT false, todo TEXT, todo_level integer)`
-
-生成实体代码的时候使用：`CREATE TABLE if not exists todolist(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, timestamp datetime, done boolean DEFAULT false, todo TEXT, todo_level integer)`
-
-注意`timestamp`的数据类型是有变化的，然后在实体代码中处理，存储到数据库的时候转换一下，取数据的时候也需要转换一下。
-
-谁有什么好招？支个招，确实很麻烦！！！
+日期类型需要注意，因为FMDB无法处理日期格式的数据类型，我建议存储的时候使用double或者float类型，然后在`options.mapping`中作映射，请参考`test/PeakSqlite.json`文件中的示例
 
 #LICENSE
 MIT
