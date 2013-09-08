@@ -23,8 +23,8 @@
 {{/fields}}
 
 //类方法
-+({{uniqueField.cocoaType}}) Field{{uniqueField.propertyName}};
++(NSString *) Field{{uniqueField.propertyName}};
 {{#fields}}
-+({{cocoaType}}{{#if pointer}} *{{/if}}) Field{{propertyName}};
++(NSString *) Field{{propertyName}};
 {{/fields}}
 @end
