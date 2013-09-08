@@ -1,7 +1,7 @@
 {
 	"name": "peaksqlite-entity-maker",
 	"description": "用于PeakSqlite项目的实体生成器",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"author": {
 		"name": "Conis",
 		"url": "http://iove.net/"

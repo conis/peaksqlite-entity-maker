@@ -28,7 +28,7 @@ E-mail: [conis.yi@gmail.com](conis.yi@gmail.com)
   //通过sqlite调用
   maker.makeWithSqlite(sqlite, saveTo, options, callback);
   //通过配置文件调用
-  maker.makeForConfig(cfgFile, callback);
+  maker.makeWithConfig(cfgFile, callback);
 ````
 
 ##PeakSqlite配置指南
