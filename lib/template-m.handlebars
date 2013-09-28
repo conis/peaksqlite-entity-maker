@@ -25,15 +25,15 @@
     self.fields = @[@"{{uniqueField.name}}", {{#fields}}{{#if @index}}, {{/if}}@"{{name}}"{{/fields}}];
     {{#fields}}{{#if unique}}self.primaryField = @"{{name}}";{{/if}}{{/fields}}
     self.primaryField = @"{{uniqueField.name}}";
-    [self setDefault];
+    [self reset];
   }
   return self;
 }
 
 //设置默认数据
--(void) setDefault{
-  //清除数据
-  self.{{uniqueField.propertyName}} = NSNotFound;
+-(void) reset{
+  //重置数据
+  self.primaryId = NSNotFound;
   {{#fields}}self.{{propertyName}} = {{defaultValue}};
   {{/fields}}
 }
@@ -43,7 +43,7 @@
   return @[
     {{#fields}}{{#if @index}},
     {{/if}}{{parameter}}{{/fields}},
-    {{uniqueField.parameter}}
+    [NSNumber numberWithInt: self.primaryId]
   ];
 }
 
@@ -54,7 +54,7 @@
   NSString *insertValues = @"{{#fields}}{{#if @index}},{{/if}}?{{/fields}}";
 
   //没有指定主键
-  if(self.{{uniqueField.propertyName}} != NSNotFound){
+  if(self.primaryId != NSNotFound){
     insertFields = [insertFields stringByAppendingString: @", {{uniqueField.name}}"];
     insertValues = [insertValues stringByAppendingString: @", ?"];
   }
@@ -74,7 +74,7 @@
 //转换字典到当前实例
 -(void)parseFromDictionary: (NSDictionary *) data{
   self.data = data;
-  self.{{uniqueField.propertyName}} = [[data objectForKey:@"{{uniqueField.name}}"] intValue];
+  self.primaryId = [[data objectForKey:@"{{uniqueField.name}}"] intValue];
   {{#fields}}
   self.{{propertyName}} = {{parse}};{{/fields}}
 }
@@ -91,13 +91,13 @@
 }
 
 //主键：{{name}}
-+(NSString*) Field{{uniqueField.propertyName}}{
++(NSString*) fieldPrimary{
   return @"{{uniqueField.name}}";
 }
 
 {{#fields}}
 //字段名：{{name}}
-+(NSString*) Field{{staticField}}{
++(NSString*) field{{staticField}}{
   return @"{{name}}";
 }
 {{/fields}}

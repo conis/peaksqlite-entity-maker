@@ -16,15 +16,15 @@
 @interface {{className}} : PeakSqlite
 
 //属性
-@property (nonatomic) {{uniqueField.cocoaType}} {{uniqueField.propertyName}};
+//@property (nonatomic) {{uniqueField.cocoaType}} {{uniqueField.propertyName}};
 
 {{#fields}}
 @property (nonatomic{{#if pointer}}, strong{{/if}}) {{cocoaType}} {{#if pointer}} *{{/if}}{{propertyName}};
 {{/fields}}
 
 //类方法
-+(NSString *) Field{{uniqueField.propertyName}};
+//+(NSString *) field{{uniqueField.propertyName}};
 {{#fields}}
-+(NSString *) Field{{staticField}};
++(NSString *) field{{staticField}};
 {{/fields}}
 @end
